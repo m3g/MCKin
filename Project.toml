@@ -1,0 +1,4 @@
+name = "MCKin"
+uuid = "c07c9004-5abc-40c6-ad18-addd649b3a61"
+authors = ["Leandro Martinez <leandro@iqm.unicamp.br>"]
+version = "0.1.0"
