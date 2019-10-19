@@ -2,11 +2,11 @@
 # Function that computes the acceptance criterium 
 #
 
-function accept(dv,kT)
+function accept(dv,RT)
   if dv <= 0.
     return true
   else
-    if exp(-dv/kT) > rand(Float64)
+    if exp(-dv/RT) > rand(Float64)
       return true
     else
       return false

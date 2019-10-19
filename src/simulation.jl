@@ -5,9 +5,10 @@
 function simulation(v,T;
                     nsamples=100, ijsample=[0,0],
                     tmax=Inf,
-                    startat=1)
-  kb = 0.001987204118 # kcal/(mol K)
-  kT = kb*T
+                    startat=1,
+                    R=0.001987204118 # kcal/mol
+                    )
+  RT = R*T
   nv = length(v)
   last_passage = zeros(Float64,nv)
   traj_start = zeros(Float64,nv,nv)
@@ -29,7 +30,7 @@ function simulation(v,T;
       # Compute the energy difference
       dv = v[x+1] - v[x]
       # Check metropolis criterium
-      if accept(dv,kT)
+      if accept(dv,RT)
         x = x + 1 
       else # If the particle remained at the same position
         continue
@@ -42,7 +43,7 @@ function simulation(v,T;
       # Compute energy difference
       dv = v[x-1] - v[x]
       # Test metropolis criterium
-      if accept(dv,kT)
+      if accept(dv,RT)
         x = x - 1
       else # If the particle remained at the same position
         continue
