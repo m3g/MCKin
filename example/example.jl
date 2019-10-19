@@ -13,7 +13,8 @@ z = data[:,1]
 PMF = data[:,5]
 
 # Lets plot the free energy profile
-plot(z,PMF,linewidth=2,xlabel="reaction coordinate",ylabel="Free energy")
+plot(z,PMF,label="",linewidth=2)
+plot!(xlabel="reaction coordinate",ylabel="Free energy")
 savefig("./PMF.pdf")
 
 # We will, in this case, use the last coordinate as the reference
@@ -42,7 +43,8 @@ fpt, nsamples = MCKin.simulation(PMF,T,nsamples=nsamples, startat=startat, ijsam
 # The fpt matrix contains, for each [i,j], the mean first-passage time from i to j. The nsamples matrix
 # contains the number of samples from which the mean was computed.
 # Lets plot the mean passage time starting from the last coordinate to all other coordinates: 
-plot(z,fpt[350,:],linewidth=2,xlabel="reaction coordinate - z",ylabel="mean passage time from 45 to z")
+plot(z,fpt[350,:],label="",linewidth=2)
+plot!(xlabel="reaction coordinate - z",ylabel="mean passage time from 45 to z")
 savefig("./fpt350.pdf")
 
 # Using the contourf function it is possible to the complete matrix of mean first passage
