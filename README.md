@@ -8,7 +8,7 @@ julia> ] add https://github.com/mcubeg/MCKin
 julia> using MCKin
 ```
 
-### Example (see the <a href="https://github.com/mcubeg/topolink/blob/master/julia/examples/davis_nxl.jl"> example.jl </a> file for details.)
+### Example (see the <a href="https://github.com/mcubeg/MCKin/blob/master/example/example.jl"> example.jl </a> file for details.)
 
 For example, given the following Potential of Mean-Force:
 <p align="center">
