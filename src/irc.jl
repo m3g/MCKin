@@ -7,7 +7,7 @@
 function irc(ztarget,z)
   irc = 1 
   nz = length(z)
-  while z[irc] < ztarget && irc < nz
+  while z[irc] < ztarget & irc < nz
     irc = irc + 1
   end
   if irc == nz
