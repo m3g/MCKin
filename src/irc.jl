@@ -10,6 +10,9 @@ function irc(ztarget,z)
   while z[irc] < ztarget & irc < nz
     irc = irc + 1
   end
+  if irc == 1 
+    return 1
+  end
   if irc == nz
     return nz
   end
