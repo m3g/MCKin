@@ -3,52 +3,34 @@
 #
 
 function simulation(v, T;
-    nsamples=100, ijsample=[0, 0],
-    tmax=Inf,
-    startat=1,
+    nsamples::Int=100, ijsample=[0, 0],
+    tmax=+Inf,
+    startat::Int=1,
     R=0.001987204118 # kcal/mol
 )
     RT = R * T
     nv = length(v)
-    last_passage = zeros(Float64, nv)
-    traj_start = zeros(Float64, nv, nv)
-    n_fpt_samples = zeros(Int64, nv, nv)
-    fpt = zeros(Float64, nv, nv)
+    last_passage = zeros(nv)
+    traj_start = zeros(nv, nv)
+    n_fpt_samples = zeros(Int, nv, nv)
+    fpt = zeros(nv, nv)
     t = 0.0
     x = startat
     if ijsample == [0, 0]
         ijsample = [1, nv]
     end
     minsample = 0
-    @inbounds while minsample < nsamples && t < tmax
+    while minsample < nsamples && t < tmax
         t = t + 1.0
-        if rand(Float64) > 0.5
-            # If this is the last position it is not possible to move further
-            if x == nv
-                continue
-            end
-            # Compute the energy difference
-            dv = v[x+1] - v[x]
-            # Check metropolis criterium
-            if accept(dv, RT)
-                x = x + 1
-            else # If the particle remained at the same position
-                continue
-            end
-        else
-            # If this is the last position it is not possible to move back
-            if x == 1
-                continue
-            end
-            # Compute energy difference
-            dv = v[x-1] - v[x]
-            # Test metropolis criterium
-            if accept(dv, RT)
-                x = x - 1
-            else # If the particle remained at the same position
-                continue
-            end
-        end
+        direction = rand((-1,+1))
+        (direction == +1 & x == nv) && continue # last position and forward direction: skip
+        (direction == -1 & x == 1 ) && continue # first position and backward direction: skip
+        # Compute the energy difference
+        dv = v[x+direction] - v[x]
+        # Check metropolis criterium
+        !accept(dv, RT) && continue
+        # The new position was accepted, so lets move on
+        x = x + direction
         # The particle moved, so lets compute first passage times from every other
         # position to this position
         for xprev in 1:nv
@@ -68,8 +50,7 @@ function simulation(v, T;
             end
         end
         last_passage[x] = t
-        # The sampling is counted for the passages from the first to the last
-        # position
+        # The sampling is counted for the passages from the first to the last position
         if n_fpt_samples[ijsample[1], ijsample[2]] > minsample
             minsample = n_fpt_samples[ijsample[1], ijsample[2]]
             println(" t = ", t, " minimum sampling = ", minsample, " of ", nsamples, " for ", ijsample[1], "->", ijsample[2])
