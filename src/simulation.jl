@@ -23,8 +23,8 @@ function simulation(v, T;
     while minsample < nsamples && t < tmax
         t = t + 1.0
         direction = rand((-1,+1))
-        (direction == +1 & x == nv) && continue # last position and forward direction: skip
-        (direction == -1 & x == 1 ) && continue # first position and backward direction: skip
+        (x == nv && direction == +1) && continue # last position and forward direction: skip
+        (x == 1 && direction == -1 ) && continue # first position and backward direction: skip
         # Compute the energy difference
         dv = v[x+direction] - v[x]
         # Check metropolis criterium
@@ -37,7 +37,7 @@ function simulation(v, T;
             # If the particle didn't pass by position xprev since the previous visit to x,
             # continue. The case "=" occurs when the particle returns to the same position after
             # having visited other positions in the meantime
-            if last_passage[xprev] >= last_passage[x]
+            if last_passage[xprev] > last_passage[x]
                 # The particle reached x now, so we can compute the time required since the last
                 # trajectory start from xprev
                 dt = t - traj_start[xprev, x]
